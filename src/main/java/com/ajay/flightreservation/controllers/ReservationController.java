@@ -2,6 +2,8 @@ package com.ajay.flightreservation.controllers;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,12 +21,15 @@ import com.ajay.flightreservation.services.ReservationService;
 public class ReservationController {
 	@Autowired
 	FlightRepository flightRepository;
+	@Autowired
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 	
 	@Autowired
 	ReservationService reservationService;
 	
     @RequestMapping(value = "/showCompleteReservation",method = RequestMethod.GET)
 	public String showCompleteReservation(@RequestParam("flightId") Long flightId,ModelMap modelMap) {
+    	LOGGER.info("inside showCompleteReservation flightId:"+flightId);
     	Optional<Flight> flight = flightRepository.findById(flightId);
     	if(flight.isPresent())
     	{
@@ -35,6 +40,7 @@ public class ReservationController {
 	
     @RequestMapping(value = "/completeReservation",method = RequestMethod.POST)
     public String completeReservation(ReservationRequest request,ModelMap modelMap) {
+    	LOGGER.info("inside completeReservation");
     	Reservation reservation = reservationService.bookFlight(request);
     	modelMap.addAttribute("msg","Reservation created successfully and the id is "+ reservation.getId());
     	return "reservationConfirmation";

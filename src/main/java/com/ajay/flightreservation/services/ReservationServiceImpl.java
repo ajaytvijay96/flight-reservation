@@ -2,9 +2,12 @@ package com.ajay.flightreservation.services;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ajay.flightreservation.controllers.ReservationController;
 import com.ajay.flightreservation.dto.ReservationRequest;
 import com.ajay.flightreservation.entities.Flight;
 import com.ajay.flightreservation.entities.Passenger;
@@ -17,6 +20,9 @@ import com.ajay.flightreservation.repos.ReservationRepository;
 public class ReservationServiceImpl implements ReservationService {
 
 	@Autowired
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImpl.class);
+	
+	@Autowired
 	FlightRepository flightRepository;
 	
 	@Autowired
@@ -28,6 +34,7 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public Reservation bookFlight(ReservationRequest request) {
 		// make payment
+		LOGGER.info("inside bookFlight()");
 		Long flightId = request.getFlightId();
 		Optional<Flight> optflight = flightRepository.findById(flightId);
 		Flight flight = optflight.get();
